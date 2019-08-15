@@ -28,5 +28,22 @@ star = SqlRunner.run( sql, values ).first
 @id = star['id'].to_i
 end
 
+def self.delete_all()
+  sql = "DELETE FROM  stars"
+  values = []
+  SqlRunner.run(sql, values)
+end
+
+def movies
+  sql = "SELECT movies.* FROM movies
+    INNER JOIN castings
+    ON castings.movie_id = movies.id
+    WHERE star_id = $1"
+  values = [@id]
+  movies_data = SqlRunner.run(sql, values)
+  movies = movies_data.map { |movies_data| Movie.new(movies_data ) }
+  return movies  
+end
+
 
 end
